@@ -1,0 +1,65 @@
+#!/usr/bin/env sh
+
+echo "🔍 Validando archivos modificados en src/... \n"
+echo "⚙️  Running ESLint on staged files..."
+
+# =============================================
+# 1. ESLint Validation (Solo archivos .ts, .tsx)
+# =============================================
+TYPES='^src/.*\.(ts|tsx)$'
+
+FILES=$(git diff --name-only --cached --diff-filter=ACM | grep -E "$TYPES" || true)
+
+# Si no hay archivos, salir
+if [ -n "$FILES" ]; then
+  # Corrección automática
+  npx eslint --fix --color $FILES
+  # Agrega archivos corregidos por eslint
+  git add $FILES
+  # Verifica si quedan errores sin corregir
+  if ! npx eslint --color $FILES; then
+    echo "" >&2
+    echo "❌ ERRORES DE ESLINT:" >&2
+    echo "----------------------" >&2
+    echo "📁 Archivos con errores:" >&2
+    ERROR_FILES=$(pnpm eslint $FILES | grep -E '^[^ ]+' | sort | uniq)
+    echo "$ERROR_FILES" | sed 's/^/  - /' >&2
+    echo "----------------------" >&2
+    exit 1
+  fi
+else
+  echo ""
+  echo "✅ No hay archivos TypeScript modificados."
+  echo ""
+fi
+
+# =============================================
+echo "⚙️  Running Prettier on staged files... \n"
+
+# =============================================
+# 1. Prettier Validation (Solo archivos .ts, .tsx, .css, .scss, .json, .md)
+# =============================================
+
+# Filtrar solo archivos modificados en src/ (ajusta extensiones según necesites)
+TYPES='^src/.*\.(ts|tsx|css|scss)$'
+FILES=$(git diff --name-only --cached --diff-filter=ACM | grep -E "$TYPES" || true)
+
+if [ -z "$FILES" ]; then
+  echo "✅ No hay archivos para formatear. \n"
+  exit 0
+fi
+
+if ! npx prettier --check --ignore-unknown $FILES > /dev/null 2>&1; then
+  echo "" >&2
+  echo "❌ ERRORES DE FORMATO:" >&2
+  echo "----------------------" >&2
+  echo "📁 Archivos con problemas:" >&2
+  pnpm prettier --list-different $FILES | sed 's/^/  - /' >&2
+  echo "" >&2
+  echo "✏️ Corrección automática:" >&2
+  pnpm prettier --write $FILES
+  git add $FILES
+  echo "----------------------" >&2 
+fi
+
+echo "✅ Formato validado correctamente!"
