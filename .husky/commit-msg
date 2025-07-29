@@ -1,0 +1,14 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Verificar que el mensaje de commit no esté vacío
+if [ -z "$1" ]; then
+  echo "Error: Commit message cannot be empty"
+  exit 1
+fi
+
+# Verificar que el mensaje de commit tenga al menos 10 caracteres
+if [ ${#1} -lt 10 ]; then
+  echo "Error: Commit message must be at least 10 characters long"
+  exit 1
+fi 
