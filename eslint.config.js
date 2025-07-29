@@ -5,7 +5,7 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from 'typescript-eslint'
 import prettier from 'eslint-plugin-prettier'
 import prettierConfig from 'eslint-config-prettier'
-import storybook from 'eslint-plugin-storybook'
+
 import { globalIgnores } from 'eslint/config'
 
 export default tseslint.config([
@@ -24,7 +24,7 @@ export default tseslint.config([
       reactRefresh.configs.vite,
       prettierConfig,
     ],
-    plugins: { prettier: prettier, storybook: storybook },
+    plugins: { prettier: prettier },
     rules: {
       'prettier/prettier': 'error',
       'arrow-body-style': 'off',
@@ -66,12 +66,11 @@ export default tseslint.config([
       reactRefresh.configs.vite,
       prettierConfig,
     ],
-    plugins: { prettier: prettier, storybook: storybook },
+    plugins: { prettier: prettier },
     rules: {
       'prettier/prettier': 'error',
       'arrow-body-style': 'off',
       'prefer-arrow-callback': 'off',
-      ...storybook.configs.recommended.rules,
     },
     languageOptions: { ecmaVersion: 2020, globals: globals.browser },
   },
