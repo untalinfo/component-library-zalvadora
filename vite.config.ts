@@ -25,6 +25,18 @@ export default defineConfig({
       shared: ['react', 'react-dom'],
     }),
   ],
+  resolve: {
+    alias: {
+      '@': './src',
+      '@/components': './src/shared/presentation/components',
+      '@/styles': './src/shared/presentation/styles',
+      '@/types': './src/shared/domain/types',
+      '@/utils': './src/shared/application/utils',
+      '@/hooks': './src/shared/application/hooks',
+      '@/constants': './src/shared/domain/constants',
+      '@/assets': './src/assets',
+    },
+  },
   build: {
     modulePreload: false, // Desactiva el preload de módulos para evitar conflictos con la federación
     target: 'esnext', // Asegúrate de que el código se compile a ESNext para compatibilidad con la federación

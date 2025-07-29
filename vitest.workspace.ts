@@ -1,5 +1,6 @@
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { resolve } from 'node:path'
 
 import { defineWorkspace } from 'vitest/config'
 
@@ -29,6 +30,21 @@ export default defineWorkspace([
         provider: 'playwright',
       },
       setupFiles: ['.storybook/vitest.setup.ts'],
+    },
+    resolve: {
+      alias: {
+        '@': resolve(__dirname, './src'),
+        '@/components': resolve(
+          __dirname,
+          './src/shared/presentation/components'
+        ),
+        '@/styles': resolve(__dirname, './src/shared/presentation/styles'),
+        '@/types': resolve(__dirname, './src/shared/domain/types'),
+        '@/utils': resolve(__dirname, './src/shared/application/utils'),
+        '@/hooks': resolve(__dirname, './src/shared/application/hooks'),
+        '@/constants': resolve(__dirname, './src/shared/domain/constants'),
+        '@/assets': resolve(__dirname, './src/assets'),
+      },
     },
   },
 ])
