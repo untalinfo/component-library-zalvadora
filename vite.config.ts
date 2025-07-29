@@ -30,5 +30,5 @@ export default defineConfig({
     target: 'esnext', // Asegúrate de que el código se compile a ESNext para compatibilidad con la federación
     minify: false, // Desactiva la minificación para facilitar la depuración
     cssCodeSplit: false, // Desactiva el split de CSS para evitar problemas con la federación
-  }
+  },
 })
